@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Authentication;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class RegisterController extends Controller
 {
@@ -32,9 +33,26 @@ class RegisterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        //
+        $datas = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+            // 'role' => ['required'],
+        ]);
+        // return $datas;
+
+        User::create([
+            'name' => $datas['name'],
+            'username' => $datas['username'],
+            'email' => $datas['email'],
+            'password' => bcrypt($datas['password'])
+            // 'role' => $datas['role']
+
+        ]);
+        return redirect(route('index'));
     }
 
     /**

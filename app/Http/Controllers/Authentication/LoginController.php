@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Authentication;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -11,6 +12,14 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return view('login');
+    }
+    public function login(Request $request)
+    {
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+            return to_route('index');
+        } else {
+            return to_route('login');
+        }
     }
 
     /**

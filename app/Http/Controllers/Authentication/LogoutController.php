@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Authentication;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class LogoutController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function logout(Request $request)
     {
-        //
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return to_route('login');
     }
 
     /**

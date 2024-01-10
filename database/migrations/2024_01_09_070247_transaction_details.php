@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('transaction_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->enum('role', ['superadmin', 'admin', 'user'])->default('user');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->foreignId('transactions_id')->constrained('transactions');
+            $table->string('nationality');
+            $table->tinyInteger('is_visa');
+            $table->date('doe_passport');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('transaction_details');
     }
 };

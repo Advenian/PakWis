@@ -16,19 +16,33 @@ use App\Http\Controllers\Authentication\RegisterController;
 */
 
 
+Route::get('/index', function () {
+    return view('index');
+})->name('index');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('index');
-    });
     Route::get('/admin', function () {
         return view('admin.index');
     });
 
     Route::post('/logout', [LogoutController::class, 'logout']);
 });
+
+Route::middleware('checkUserRole:admin,superadmin')->group(function () {
+    Route::get('/', function () {
+        return view('index');
+    })->name('index');
+});
+Route::middleware('checkUserRole:user,superadmin')->group(function () {
+    Route::get('/indexusersuperadmin', function () {
+        return view('index');
+    })->name('index');
+});
+
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.index');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.index');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

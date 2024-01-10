@@ -42,12 +42,17 @@
                                 Call : +01 123455678990
                             </span>
                         </a>
-                        <a href="{{ url('') }}">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                            <span>
-                                Email : demo@gmail.com
-                            </span>
-                        </a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit">
+                                <a href="{{ url('') }}">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    <span>
+                                        Email : {{ auth()->user()->username }}
+                                    </span>
+                                </a>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
