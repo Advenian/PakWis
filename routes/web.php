@@ -30,12 +30,12 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware('checkUserRole:admin,superadmin')->group(function () {
     Route::get('/', function () {
-        return view('index');
+        return view('layout.index');
     })->name('index');
 });
 Route::middleware('checkUserRole:user,superadmin')->group(function () {
     Route::get('/indexusersuperadmin', function () {
-        return view('index');
+        return view('layout.index');
     })->name('index');
 });
 
