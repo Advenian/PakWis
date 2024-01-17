@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Authentication\LogoutController;
 use App\Http\Controllers\Authentication\RegisterController;
+use App\Http\Controllers\TravelPackageController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,10 +19,16 @@ use App\Http\Controllers\Authentication\RegisterController;
 
 
 Route::get('/index', function () {
-    return view('index');
+    return view('admin.content');
 })->name('index');
+Route::get('/travel-package', function () {
+    return view('admin.travel-package-create');
+})->name('travel-package-create');
 
-Route::middleware(['auth'])->group(function () {
+route::post('/travel-package-store', [TravelPackageController::class, 'store'])->name('travel-package-store');
+route::get('/travel-package-index', [TravelPackageController::class, 'index'])->name('travel-package-index');
+
+Route::middleware(['checkUserRole:admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.index');
     });

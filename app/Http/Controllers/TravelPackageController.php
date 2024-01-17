@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TravelPackage;
 use Illuminate\Http\Request;
+use App\Models\TravelPackage;
 // use App\Models\TravelPackages;
 
 class TravelPackageController extends Controller
@@ -12,7 +12,7 @@ class TravelPackageController extends Controller
     {
         $travelPackages = TravelPackage::all();
 
-        return view('travel-packages.index', compact('travelPackages'));
+        return view('admin.travel-package', compact('travelPackages'));
     }
 
     public function create()
@@ -50,7 +50,7 @@ class TravelPackageController extends Controller
             'about' => $datas['about'],
         ]);
 
-        return redirect()->route('travel-packages.index');
+        return redirect()->route('travel-package-index');
     }
 
     public function edit(TravelPackage $travelPackage)
