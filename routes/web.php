@@ -17,35 +17,37 @@ use App\Http\Controllers\TravelPackageController;
 |
 */
 
-
-Route::get('/index', function () {
-    return view('admin.content');
-})->name('index');
-Route::get('/travel-package', function () {
-    return view('admin.travel-package-create');
-})->name('travel-package-create');
-
-route::post('/travel-package-store', [TravelPackageController::class, 'store'])->name('travel-package-store');
-route::get('/travel-package-index', [TravelPackageController::class, 'index'])->name('travel-package-index');
-
-Route::middleware(['checkUserRole:admin'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.index');
+Route::prefix('admin')->middleware('checkUserRole:admin')->group(function () {
+    route::get('/', function () {
+        return view('admin.content');
     });
 
-    Route::post('/logout', [LogoutController::class, 'logout']);
+    Route::prefix('travel-package')->group(function () {
+        route::post('store', [TravelPackageController::class, 'store'])->name('travel-package-store');
+        route::get('index', [TravelPackageController::class, 'index'])->name('travel-package-index');
+        route::get('create', [TravelPackageController::class, 'create'])->name('travel-package-create');
+        Route::get('{travelPackage}/edit', [TravelPackageController::class, 'edit'])->name('travel-package.edit');
+    });
+    Route::prefix('user-list')->group(function () {
+        route::post('store', [RegisterController::class, 'store'])->name('user-list-store');
+        route::get('index', [RegisterController::class, 'index'])->name('user-list-index');
+        route::get('create', [RegisterController::class, 'create'])->name('user-list-create');
+        Route::get('{user}/edit', [RegisterController::class, 'edit'])->name('user-list.edit');
+    });
 });
 
-Route::middleware('checkUserRole:admin,superadmin')->group(function () {
-    Route::get('/', function () {
-        return view('layout.index');
-    })->name('index');
-});
-Route::middleware('checkUserRole:user,superadmin')->group(function () {
-    Route::get('/indexusersuperadmin', function () {
-        return view('layout.index');
-    })->name('index');
-});
+Route::get('/', function () {
+    return view('layout.index');
+})->name('index');
+
+
+
+// Route::middleware('checkUserRole:admin,superadmin')->group(function () {
+//     Route::get('/', function () {
+//         return view('layout.index');
+//     })->name('index');
+// });
+
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.index');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');

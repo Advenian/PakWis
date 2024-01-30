@@ -16,9 +16,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-            return to_route('index');
+            // Authentication successful, redirect to the 'index' route
+            return redirect()->route('index');
         } else {
-            return to_route('login');
+            // Authentication failed, redirect back to the 'login' route
+            return redirect()->route('login');
+            // return $request;
         }
     }
 

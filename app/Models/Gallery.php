@@ -10,13 +10,13 @@ class Gallery extends Model
     use HasFactory;
 
     protected $fillable = [
-        'travel_packages_id',
+        'travel_package_id',
         'image',
     ];
 
     // Define a many-to-one relationship with the TravelPackage model
     public function travelPackage()
     {
-        return $this->belongsTo(TravelPackage::class, 'travel_packages_id');
+        return $this->belongsTo(TravelPackage::class, 'travel_package_id');
     }
 }

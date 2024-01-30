@@ -19,7 +19,8 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return view('admin.user-list.index', compact('users'));
     }
 
     /**
@@ -40,17 +41,18 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            // 'role' => ['required'],
+            'role' => ['nullable'],
         ]);
         // return $datas;
+
+        // $datas['role'] = $request->has('role') ? $datas['role'] : 'user';
 
         User::create([
             'name' => $datas['name'],
             'username' => $datas['username'],
             'email' => $datas['email'],
-            'password' => bcrypt($datas['password'])
-            // 'role' => $datas['role']
-
+            'password' => bcrypt($datas['password']),
+            'role' => $datas['role'] ?? 'user',
         ]);
         return redirect(route('index'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gallery;
 use Illuminate\Http\Request;
 use App\Models\TravelPackage;
 // use App\Models\TravelPackages;
@@ -12,16 +13,17 @@ class TravelPackageController extends Controller
     {
         $travelPackages = TravelPackage::all();
 
-        return view('admin.travel-package', compact('travelPackages'));
+        return view('admin.travel-package.index', compact('travelPackages'));
     }
 
     public function create()
     {
-        return view('travel-packages.create');
+        return view('admin.travel-package.create');
     }
 
     public function store(Request $request)
     {
+        // return $request;
         $datas = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:travel_packages',
@@ -34,9 +36,11 @@ class TravelPackageController extends Controller
             'type' => 'required|string|max:255',
             'price' => 'required|integer',
             'about' => 'required|string',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        // return $datas;
 
-        TravelPackage::create([
+        $travelPackage = TravelPackage::create([
             'title' => $datas['title'],
             'slug' => $datas['slug'],
             'location' => $datas['location'],
@@ -49,6 +53,19 @@ class TravelPackageController extends Controller
             'price' => $datas['price'],
             'about' => $datas['about'],
         ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('gallery_images', 'public');
+                $gallery = new Gallery(['image' => $path]);
+                $travelPackage->gallery()->save($gallery);
+                // Set the travel_package_id for the gallery
+                $gallery->travel_package_id = $travelPackage->id;
+
+                // Save the gallery
+                $gallery->save();
+            }
+        }
 
         return redirect()->route('travel-package-index');
     }

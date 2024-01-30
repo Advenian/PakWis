@@ -6,7 +6,7 @@
                 <h5 class="card-title">Create a Package!</h5>
 
                 <!-- Vertical Form -->
-                <form class="row g-3" method="post" action="{{ route('travel-package-store') }}">
+                <form class="row g-3" method="post" action="{{ route('travel-package-store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="col-12">
                         <label for="title" class="form-label">Title</label>
@@ -51,6 +51,10 @@
                     <div class="col-12">
                         <label for="about" class="form-label">About</label>
                         <textarea class="form-control" id="about" name="about" rows="4" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label for="imageInput" class="form-label">About</label>
+                        <input type="file" id="imageInput" name="images[]" multiple>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>

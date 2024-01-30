@@ -35,6 +35,13 @@
 
                  <li><a href="{{ url('about.html') }}">About</a></li>
                  <li><a href="{{ url('contact.html') }}">Contact</a></li>
+                 <li>
+                     <form action="{{ route('logout') }}" method="POST">
+                         @csrf
+                         @method('post')
+                         <button type="submit">Logout</button>
+                     </form>
+                 </li>
              </ul>
          </nav><!-- .navbar -->
 
